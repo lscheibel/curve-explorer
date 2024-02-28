@@ -1,0 +1,31 @@
+.numberInput {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.numberControls {
+  background: var(--white);
+  border-radius: 2px;
+  font-weight: 700;
+  overflow: hidden;
+}
+
+.numberButton {
+  border: none;
+  background: var(--white);
+
+  span {
+    display: block;
+    transform: translateY(-1px);
+  }
+}
+
+.numberValue {
+  background: var(--blue);
+  border-radius: 2px;
+  color: var(--white);
+  padding: 0 4px;
+  font-variant-numeric: tabular-nums;
+}

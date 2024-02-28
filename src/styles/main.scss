@@ -1,0 +1,15 @@
+@import 'normalize';
+@import 'font-faces';
+@import 'variables';
+
+html,
+body {
+    background: var(--white);
+    font-family: var(--font-family);
+    color: var(--black);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    min-width: 0;
+}
