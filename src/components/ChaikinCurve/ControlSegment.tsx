@@ -10,26 +10,17 @@ export interface ControlSegmentProps {
 const ControlSegment = ({ seg, onInsertPoint }: ControlSegmentProps) => {
     const [previewPos, setPreviewPos] = useState<Point | null>(null);
 
+    const plusRadius = 3;
+
     return (
         <>
-            <line
-                x1={seg.from.x}
-                y1={seg.from.y}
-                x2={seg.to.x}
-                y2={seg.to.y}
-                strokeWidth={'var(--stroke-width)'}
-                stroke={'var(--light-grey)'}
-                strokeLinecap={'round'}
-                strokeOpacity={1}
-                strokeDasharray={'var(--stroke-dash)'}
-            />
             <line
                 x1={seg.a.x}
                 y1={seg.a.y}
                 x2={seg.b.x}
                 y2={seg.b.y}
                 stroke={'transparent'}
-                strokeWidth={10}
+                strokeWidth={12}
                 onPointerMove={(e) => {
                     const screenPos = new Point(e.clientX, e.clientY);
                     const svg = e.currentTarget.closest('svg')!;
@@ -51,8 +42,8 @@ const ControlSegment = ({ seg, onInsertPoint }: ControlSegmentProps) => {
                 <g style={{ pointerEvents: 'none' }}>
                     <circle cx={previewPos.x} cy={previewPos.y} r={6} fill={'var(--blue)'} />
                     <line
-                        x1={previewPos.x - 4}
-                        x2={previewPos.x + 4}
+                        x1={previewPos.x - plusRadius}
+                        x2={previewPos.x + plusRadius}
                         y1={previewPos.y}
                         y2={previewPos.y}
                         stroke={'var(--white)'}
@@ -61,8 +52,8 @@ const ControlSegment = ({ seg, onInsertPoint }: ControlSegmentProps) => {
                     <line
                         x1={previewPos.x}
                         x2={previewPos.x}
-                        y1={previewPos.y - 4}
-                        y2={previewPos.y + 4}
+                        y1={previewPos.y - plusRadius}
+                        y2={previewPos.y + plusRadius}
                         stroke={'var(--white)'}
                         strokeWidth={2}
                     />

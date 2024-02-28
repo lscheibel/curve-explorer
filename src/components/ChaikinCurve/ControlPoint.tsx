@@ -25,7 +25,7 @@ const ControlPoint = ({ position, onPositionChange, selected, onSelect }: Contro
                 {...bind()}
                 cx={position.x}
                 cy={position.y}
-                r={10}
+                r={12}
                 fill={'transparent'}
                 onClick={onSelect}
                 style={{ touchAction: 'none' }}

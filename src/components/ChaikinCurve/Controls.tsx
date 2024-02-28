@@ -45,22 +45,6 @@ const Controls = ({ options, onChange }: ControlsProps) => {
 
             <Divider />
 
-            <Group style={{ opacity: options.dynamicResolution ? 0.3 : 1 }}>
-                <NumberInput
-                    value={options.iterations}
-                    onChange={(value) => setOptions({ iterations: value })}
-                    step={1}
-                    plusButtonProps={{
-                        onMouseEnter: () => setOptions({ showNextStep: true }),
-                        onMouseLeave: () => setOptions({ showNextStep: false }),
-                    }}
-                    min={0}
-                    max={10}
-                >
-                    ITERATIONS
-                </NumberInput>
-            </Group>
-
             <Group>
                 <BoolInput
                     value={options.dynamicResolution}
@@ -70,29 +54,51 @@ const Controls = ({ options, onChange }: ControlsProps) => {
                 </BoolInput>
             </Group>
 
-            <Group style={{ opacity: options.dynamicResolution ? 1 : 0.3 }}>
-                <NumberInput
-                    value={options.maxAngle}
-                    onChange={(value) => setOptions({ maxAngle: value })}
-                    step={1}
-                    min={0}
-                    max={360}
-                >
-                    MAX ANGLE
-                </NumberInput>
-            </Group>
-            <Group style={{ opacity: options.dynamicResolution ? 1 : 0.3 }}>
-                Max Iterations:{' '}
-                <NumberInput
-                    value={options.maxIterations}
-                    onChange={(value) => setOptions({ maxIterations: value })}
-                    step={1}
-                    min={0}
-                    max={10}
-                >
-                    MAX ITERATIONS
-                </NumberInput>
-            </Group>
+            {!options.dynamicResolution && (
+                <Group style={{ opacity: options.dynamicResolution ? 0.3 : 1 }}>
+                    <NumberInput
+                        value={options.iterations}
+                        onChange={(value) => setOptions({ iterations: value })}
+                        step={1}
+                        plusButtonProps={{
+                            onMouseEnter: () => setOptions({ showNextStep: true }),
+                            onMouseLeave: () => setOptions({ showNextStep: false }),
+                        }}
+                        min={0}
+                        max={10}
+                    >
+                        ITERATIONS
+                    </NumberInput>
+                </Group>
+            )}
+
+            {options.dynamicResolution && (
+                <Group style={{ opacity: options.dynamicResolution ? 1 : 0.3 }}>
+                    <NumberInput
+                        value={options.maxAngle}
+                        onChange={(value) => setOptions({ maxAngle: value })}
+                        step={1}
+                        min={0}
+                        max={360}
+                    >
+                        MAX ANGLE
+                    </NumberInput>
+                </Group>
+            )}
+
+            {options.dynamicResolution && (
+                <Group style={{ opacity: options.dynamicResolution ? 1 : 0.3 }}>
+                    <NumberInput
+                        value={options.maxIterations}
+                        onChange={(value) => setOptions({ maxIterations: value })}
+                        step={1}
+                        min={0}
+                        max={10}
+                    >
+                        MAX ITERATIONS
+                    </NumberInput>
+                </Group>
+            )}
 
             <Divider />
 
@@ -167,8 +173,11 @@ const NumberInput = ({
     const timeoutRef = useRef<any | null>(null);
     const countRef = useRef(0);
 
+    const isMouseDownRef = useRef(false);
+
     const repeat = (fn: () => void) => {
-        console.log('repeat');
+        if (!isMouseDownRef.current) return;
+
         fn();
         countRef.current++;
 
@@ -184,6 +193,7 @@ const NumberInput = ({
     };
 
     const cancel = () => {
+        isMouseDownRef.current = false;
         countRef.current = 0;
         if (timeoutRef.current != null) {
             clearTimeout(timeoutRef.current);
@@ -195,16 +205,24 @@ const NumberInput = ({
             <div className={styles.numberControls}>
                 <button
                     className={styles.numberButton}
-                    onPointerDown={() => repeat(decIterations)}
+                    onPointerDown={() => {
+                        isMouseDownRef.current = true;
+                        repeat(decIterations);
+                    }}
                     onPointerUp={cancel}
+                    onPointerLeave={cancel}
                 >
                     <span>-</span>
                 </button>
                 <span className={styles.numberValue}>{formatter(value)}</span>
                 <button
                     className={styles.numberButton}
-                    onPointerDown={() => repeat(incIterations)}
+                    onPointerDown={() => {
+                        isMouseDownRef.current = true;
+                        repeat(incIterations);
+                    }}
                     onPointerUp={cancel}
+                    onPointerLeave={cancel}
                     {...plusButtonProps}
                 >
                     <span>+</span>
@@ -224,8 +242,9 @@ interface BoolInputProps {
 
 const BoolInput = ({ value, onChange, children }: BoolInputProps) => {
     return (
-        <label style={{ display: 'flex', gap: '4px', fontWeight: '700' }}>
+        <label className={styles.checkboxLabel}>
             <input
+                className={styles.checkboxInput}
                 type={'checkbox'}
                 checked={value}
                 onChange={(e) => {

@@ -29,3 +29,13 @@
   padding: 0 4px;
   font-variant-numeric: tabular-nums;
 }
+
+.checkboxLabel {
+  display: flex;
+  gap: 4px;
+  font-weight: 700;
+}
+
+.checkboxInput {
+  accent-color: var(--blue);
+}

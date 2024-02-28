@@ -131,17 +131,17 @@ const ChaikinCurve = ({ svgRef, svgDimensions, controlPoints, onChange, selected
 
             {toSegments(controlPoints).map((seg, index) => {
                 return (
-                    <ControlSegment
-                        seg={seg}
-                        key={`control:${index}`}
-                        onInsertPoint={(point) => {
-                            const nextPoints = [...controlPoints];
-                            nextPoints.splice(index + 1, 0, point);
-                            if (onChange) {
-                                onChange(nextPoints);
-                                onSelect(index + 1);
-                            }
-                        }}
+                    <line
+                        key={`seg-viz:${index}`}
+                        x1={seg.from.x}
+                        y1={seg.from.y}
+                        x2={seg.to.x}
+                        y2={seg.to.y}
+                        strokeWidth={'var(--stroke-width)'}
+                        stroke={'var(--light-grey)'}
+                        strokeLinecap={'round'}
+                        strokeOpacity={1}
+                        strokeDasharray={'var(--stroke-dash)'}
                     />
                 );
             })}
@@ -266,6 +266,23 @@ const ChaikinCurve = ({ svgRef, svgDimensions, controlPoints, onChange, selected
                 );
             })}
 
+            {toSegments(controlPoints).map((seg, index) => {
+                return (
+                    <ControlSegment
+                        seg={seg}
+                        key={`control:${index}`}
+                        onInsertPoint={(point) => {
+                            const nextPoints = [...controlPoints];
+                            nextPoints.splice(index + 1, 0, point);
+                            if (onChange) {
+                                onChange(nextPoints);
+                                onSelect(index + 1);
+                            }
+                        }}
+                    />
+                );
+            })}
+
             {controlPoints.map((p, i) => {
                 return (
                     <ControlPoint
@@ -285,7 +302,7 @@ const ChaikinCurve = ({ svgRef, svgDimensions, controlPoints, onChange, selected
                 position={new Point(bbox.center.x, bbox.top - 12)}
                 anchorX={'center'}
                 anchorY={'bottom'}
-                style={{ minWidth: 'max-content', color: 'var(--black)' }}
+                style={{ width: 'max-content', color: 'var(--black)' }}
             >
                 <Controls options={options} onChange={_setOptions} />
             </HtmlForeignObject>
