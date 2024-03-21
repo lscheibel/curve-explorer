@@ -1,0 +1,16 @@
+.credits {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  opacity: 0.5;
+  font-size: 0.8em;
+  transition: opacity 200ms;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+}
