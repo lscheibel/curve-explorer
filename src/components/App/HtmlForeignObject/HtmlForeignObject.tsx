@@ -34,7 +34,14 @@ const HtmlForeignObject = ({
 
     return (
         <foreignObject x={posX} y={posY} {...dimensions}>
-            <div ref={ref} {...props}>
+            <div
+                ref={ref}
+                {...props}
+                style={{
+                    overflow: 'hidden', // Allows children to define a margin and overflow will be hidden anyway.
+                    ...props.style,
+                }}
+            >
                 {children}
             </div>
         </foreignObject>

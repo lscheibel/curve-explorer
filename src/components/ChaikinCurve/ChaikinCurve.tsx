@@ -5,11 +5,9 @@ import { Segment } from '../../utils/geo/Segment';
 import ControlPoint from './ControlPoint';
 import HtmlForeignObject from '../App/HtmlForeignObject/HtmlForeignObject';
 import range from 'lodash/range';
-import { useCursorPosition } from './useCursorPosition';
 import ControlSegment from './ControlSegment';
 import DeleteZone from '../DeleteZone/DeleteZone';
 import { call } from '../../utils/call';
-import { clamp } from '../../utils/math';
 import { BSplineCurve } from '../../utils/curves/BSplineCurve';
 import Controls from './Controls';
 
@@ -34,35 +32,23 @@ export interface ChaikinCurveProps {
     onSelect: (selectedIndex: number | null) => void;
 }
 
+export const initialValues: ChaikinCurveOptions = {
+    showBSpline: true,
+    showDots: false,
+    closedShape: false,
+    factor: 0.25,
+    iterations: 2,
+    dynamicResolution: false,
+    maxAngle: 3,
+    maxIterations: 10,
+    showNextStep: false,
+};
+
 const ChaikinCurve = ({ svgRef, svgDimensions, controlPoints, onChange, selected, onSelect }: ChaikinCurveProps) => {
-    const cursorPos = useCursorPosition(svgRef);
-
-    const [options, _setOptions] = useState<ChaikinCurveOptions>({
-        showBSpline: true,
-        showDots: false,
-        closedShape: false,
-        factor: 0.25,
-        iterations: 2,
-        dynamicResolution: false,
-        maxAngle: 3,
-        maxIterations: 10,
-        showNextStep: false,
-    });
-
-    const setOptions = (partial: Partial<ChaikinCurveOptions>) => {
-        _setOptions((o) => ({ ...o, ...partial }));
-    };
-
-    const [factorInput, setFactorInput] = useState(0.25);
-    const [maxAngleInput, setMaxAngleInput] = useState(5);
-    const [maxIterationsInput, setMaxIterationsInput] = useState(10);
+    const [options, _setOptions] = useState<ChaikinCurveOptions>(initialValues);
 
     const chaikinCurve = new CornerCuttingCurve(controlPoints, options.factor);
-    const incIterations = () => setOptions({ iterations: clamp(options.iterations + 1, 0, 10) });
-    const decIterations = () => setOptions({ iterations: clamp(options.iterations - 1, 0, 10) });
-
     const previewIterations = options.dynamicResolution ? [] : range(0, options.iterations);
-
     const bbox = chaikinCurve.controlPoints.boundingBox;
 
     const interpolate = (i = options.iterations) => {
@@ -163,7 +149,7 @@ const ChaikinCurve = ({ svgRef, svgDimensions, controlPoints, onChange, selected
                     const pointBEnd = normal.add(pointB);
 
                     return (
-                        <g style={{ pointerEvents: 'none' }}>
+                        <g key={index} style={{ pointerEvents: 'none' }}>
                             <line
                                 x1={pointAStart.x}
                                 y1={pointAStart.y}
@@ -200,7 +186,7 @@ const ChaikinCurve = ({ svgRef, svgDimensions, controlPoints, onChange, selected
                     const pointBEnd = normal.add(pointB);
 
                     return (
-                        <g style={{ pointerEvents: 'none' }}>
+                        <g key={`${previewIteration}:${index}`} style={{ pointerEvents: 'none' }}>
                             {previewIteration > 0 && (
                                 <line
                                     key={`prev-seg:${index}`}
@@ -299,7 +285,7 @@ const ChaikinCurve = ({ svgRef, svgDimensions, controlPoints, onChange, selected
             })}
 
             <HtmlForeignObject
-                position={new Point(bbox.center.x, bbox.top - 12)}
+                position={new Point(bbox.center.x, bbox.top)}
                 anchorX={'center'}
                 anchorY={'bottom'}
                 style={{ width: 'max-content', color: 'var(--black)' }}

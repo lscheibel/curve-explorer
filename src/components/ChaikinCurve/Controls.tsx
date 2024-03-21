@@ -1,8 +1,9 @@
 import React, { useRef } from 'react';
-import { ChaikinCurveOptions } from './ChaikinCurve';
+import { ChaikinCurveOptions, initialValues } from './ChaikinCurve';
 import { clamp } from '../../utils/math';
 import styles from './Controls.module.scss';
 import { useStableCallback } from '../../utils/useStableCallback';
+import cn from 'classnames';
 
 export interface ControlsProps {
     options: ChaikinCurveOptions;
@@ -15,16 +16,7 @@ const Controls = ({ options, onChange }: ControlsProps) => {
     };
 
     return (
-        <div
-            style={{
-                background: 'var(--true-white)',
-                borderRadius: '8px',
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                color: 'rgba(0,0,0,.0.87)',
-            }}
-        >
+        <div className={styles.container}>
             <Group>
                 <BoolInput value={options.closedShape} onChange={(value) => setOptions({ closedShape: value })}>
                     CLOSE SHAPE
@@ -35,6 +27,7 @@ const Controls = ({ options, onChange }: ControlsProps) => {
                     value={options.factor}
                     formatter={(value) => value.toFixed(2)}
                     onChange={(value) => setOptions({ factor: value })}
+                    onReset={() => setOptions({ factor: initialValues.factor })}
                     step={0.01}
                     min={0}
                     max={1}
@@ -59,6 +52,7 @@ const Controls = ({ options, onChange }: ControlsProps) => {
                     <NumberInput
                         value={options.iterations}
                         onChange={(value) => setOptions({ iterations: value })}
+                        onReset={() => setOptions({ iterations: initialValues.iterations })}
                         step={1}
                         plusButtonProps={{
                             onMouseEnter: () => setOptions({ showNextStep: true }),
@@ -77,6 +71,7 @@ const Controls = ({ options, onChange }: ControlsProps) => {
                     <NumberInput
                         value={options.maxAngle}
                         onChange={(value) => setOptions({ maxAngle: value })}
+                        onReset={() => setOptions({ maxAngle: initialValues.maxAngle })}
                         step={1}
                         min={0}
                         max={360}
@@ -91,6 +86,7 @@ const Controls = ({ options, onChange }: ControlsProps) => {
                     <NumberInput
                         value={options.maxIterations}
                         onChange={(value) => setOptions({ maxIterations: value })}
+                        onReset={() => setOptions({ maxIterations: initialValues.maxIterations })}
                         step={1}
                         min={0}
                         max={10}
@@ -119,25 +115,13 @@ const Controls = ({ options, onChange }: ControlsProps) => {
 export default Controls;
 
 const Group = (props: React.HTMLAttributes<HTMLDivElement>) => {
-    return (
-        <div
-            {...props}
-            style={{
-                padding: '8px 8px',
-                display: 'flex',
-                flexWrap: 'nowrap',
-                alignItems: 'center',
-                justifyContent: 'center',
-                ...props.style,
-            }}
-        />
-    );
+    return <div {...props} className={cn(styles.controlGroup)} />;
 };
 
 const Divider = () => {
     return (
-        <div style={{ padding: '0 8px' }}>
-            <div style={{ height: '100%', width: 1, background: 'var(--white)' }} />
+        <div className={styles.divider} style={{ padding: '0 8px' }}>
+            <div className={styles.dividerLine} />
         </div>
     );
 };
@@ -147,6 +131,7 @@ interface NumberInputProps {
     formatter?: (value: number) => string;
     step: number;
     onChange: (num: number) => void;
+    onReset: () => void;
     plusButtonProps?: React.HTMLAttributes<HTMLButtonElement>;
     children: React.ReactNode;
     min: number;
@@ -156,6 +141,7 @@ interface NumberInputProps {
 const NumberInput = ({
     value,
     onChange,
+    onReset,
     step,
     plusButtonProps,
     children,
@@ -214,7 +200,9 @@ const NumberInput = ({
                 >
                     <span>-</span>
                 </button>
-                <span className={styles.numberValue}>{formatter(value)}</span>
+                <span className={styles.numberValue} onDoubleClick={onReset}>
+                    {formatter(value)}
+                </span>
                 <button
                     className={styles.numberButton}
                     onPointerDown={() => {

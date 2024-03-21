@@ -1,3 +1,32 @@
+.container {
+  background: var(--true-white);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  color: rgba(0, 0, 0, 0.87);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  margin: 16px 16px 24px;
+}
+
+.controlGroup {
+  padding: 8px 8px;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.divider {
+  padding: 0 8px;
+}
+
+.dividerLine {
+  height: 100%;
+  width: 1px;
+  background: var(--white);
+}
+
 .numberInput {
   display: flex;
   justify-content: center;
