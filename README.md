@@ -6,7 +6,7 @@ This tool is meant as an educational resource for understanding the Chaikin Curv
 Notable Features:
 - Move the shapes control points
 - Insert new control points
-- ~~Remove control points~~ TODO
+- Remove control points
 - Optionally close the shape
 - Adjust the corner cutting ratio
 - Adjust the number of iterations (and preview the next corner cutting iteration)

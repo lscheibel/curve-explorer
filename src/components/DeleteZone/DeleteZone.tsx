@@ -7,16 +7,17 @@ export interface DeleteZoneProps {
 
 const DeleteZone = ({ svgDimensions: { width: svgWidth, height: svgHeight }, onDelete }: DeleteZoneProps) => {
     const height = 50;
-    const width = 150;
+    const width = 200;
+    const marginY = 16;
 
     const x = -width / 2;
-    const y = svgHeight / 2 - height;
+    const y = svgHeight / 2 - height - marginY;
 
     const centerX = 0;
-    const centerY = svgHeight / 2 - height / 2;
+    const centerY = svgHeight / 2 - height / 2 - marginY;
 
     return (
-        <g>
+        <g onClick={onDelete} style={{ cursor: 'pointer' }}>
             <rect
                 x={x}
                 y={y}
@@ -29,7 +30,7 @@ const DeleteZone = ({ svgDimensions: { width: svgWidth, height: svgHeight }, onD
                 strokeWidth={2}
             />
             <text x={centerX} y={centerY} textAnchor={'middle'} fill={'var(--red)'} dominantBaseline={'middle'}>
-                Todo: Remove
+                Remove selected node
             </text>
         </g>
     );

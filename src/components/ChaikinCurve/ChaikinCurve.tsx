@@ -10,6 +10,7 @@ import DeleteZone from '../DeleteZone/DeleteZone';
 import { call } from '../../utils/call';
 import { BSplineCurve } from '../../utils/curves/BSplineCurve';
 import Controls from './Controls';
+import { notAllowedShake } from '../../utils/animations/notAllowedShake';
 
 export interface ChaikinCurveOptions {
     showBSpline: boolean;
@@ -73,6 +74,8 @@ const ChaikinCurve = ({ svgRef, svgDimensions, controlPoints, onChange, selected
                         const nextPoints = controlPoints.filter((_, i) => i !== selected);
                         if (nextPoints.length >= 2) {
                             onChange?.(nextPoints);
+                        } else {
+                            if (svgRef.current) notAllowedShake(svgRef.current);
                         }
                     }}
                 />
