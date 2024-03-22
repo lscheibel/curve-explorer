@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { flushSync } from 'react-dom';
 import { useResizeObserver } from './useResizeObserver';
 
 export const useDomNodeDimensions = <E extends HTMLElement | SVGElement>(ref: React.MutableRefObject<E | null>) => {
@@ -6,7 +7,7 @@ export const useDomNodeDimensions = <E extends HTMLElement | SVGElement>(ref: Re
 
     useResizeObserver<E>(ref, (entry) => {
         const { width, height } = entry.contentRect;
-        setDimensions({ width, height });
+        flushSync(() => setDimensions({ width, height }));
     });
 
     return dimensions;
