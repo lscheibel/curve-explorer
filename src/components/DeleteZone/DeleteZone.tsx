@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useWindowEvent } from '../../utils/useWindowEvent';
 
 export interface DeleteZoneProps {
     onDelete?: () => void;
@@ -15,6 +16,10 @@ const DeleteZone = ({ svgDimensions: { width: svgWidth, height: svgHeight }, onD
 
     const centerX = 0;
     const centerY = svgHeight / 2 - height / 2 - marginY;
+
+    useWindowEvent('keydown', (e) => {
+        if (e.key === 'Delete' || e.key === 'Backspace') onDelete?.();
+    });
 
     return (
         <g onClick={onDelete} style={{ cursor: 'pointer' }}>
