@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ChaikinCurveOptions, initialValues } from './ChaikinCurve';
 import { clamp } from '../../utils/math';
 import styles from './Controls.module.scss';
@@ -149,6 +149,23 @@ const NumberInput = ({
     max,
     formatter = (v) => '' + v,
 }: NumberInputProps) => {
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const [inputValue, setInputValue] = useState(formatter(value));
+    useEffect(() => {
+        const input = inputRef.current;
+        if (!input) return;
+        if (document.activeElement === input) {
+            // activeElement only changes after click event fires.
+            // Therefore, we queue up another check after the next activeElement has been decided.
+            Promise.resolve().then(() => {
+                if (document.activeElement === input) return;
+                setInputValue(formatter(value));
+            });
+            return;
+        }
+        setInputValue(formatter(value));
+    }, [value]);
+
     const decIterations = useStableCallback(() => {
         onChange(clamp(value - step, min, max));
     });
@@ -187,7 +204,7 @@ const NumberInput = ({
     };
 
     return (
-        <div className={styles.numberInput}>
+        <div className={styles.numberInputWrapper}>
             <div className={styles.numberControls}>
                 <button
                     className={styles.numberButton}
@@ -201,7 +218,26 @@ const NumberInput = ({
                     <span>-</span>
                 </button>
                 <span className={styles.numberValue} onDoubleClick={onReset}>
-                    {formatter(value)}
+                    <input
+                        ref={inputRef}
+                        style={{ width: `calc(${Math.max(1, inputValue.length)}ch + 0.5rem)` }}
+                        className={styles.numberInput}
+                        type={'number'}
+                        step={step}
+                        min={min}
+                        max={max}
+                        value={inputValue}
+                        onChange={(e) => {
+                            setInputValue(e.target.value);
+                            const value = e.target.valueAsNumber;
+                            const isValid = !Number.isNaN(value) && value >= min && value <= max;
+                            if (isValid) onChange(value);
+                        }}
+                        onBlur={() => setInputValue(formatter(value))}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') setInputValue(formatter(value));
+                        }}
+                    />
                 </span>
                 <button
                     className={styles.numberButton}
