@@ -102,21 +102,21 @@ const ChaikinCurve = ({ svgRef, svgDimensions, controlPoints, onChange, selected
                 );
             })}
 
-            {Segment.fromBoundingBox(chaikinCurve.controlPoints.boundingBox).map((seg, index) => {
-                return (
-                    <line
-                        key={`bbox:${index}`}
-                        x1={seg.from.x}
-                        y1={seg.from.y}
-                        x2={seg.to.x}
-                        y2={seg.to.y}
-                        strokeWidth={'0.2'}
-                        stroke={'#ff0'}
-                        strokeLinecap={'round'}
-                        strokeOpacity={1}
-                    />
-                );
-            })}
+            {/*{Segment.fromBoundingBox(chaikinCurve.controlPoints.boundingBox).map((seg, index) => {*/}
+            {/*    return (*/}
+            {/*        <line*/}
+            {/*            key={`bbox:${index}`}*/}
+            {/*            x1={seg.from.x}*/}
+            {/*            y1={seg.from.y}*/}
+            {/*            x2={seg.to.x}*/}
+            {/*            y2={seg.to.y}*/}
+            {/*            strokeWidth={'0.2'}*/}
+            {/*            stroke={'#ff0'}*/}
+            {/*            strokeLinecap={'round'}*/}
+            {/*            strokeOpacity={1}*/}
+            {/*        />*/}
+            {/*    );*/}
+            {/*})}*/}
 
             {toSegments(controlPoints).map((seg, index) => {
                 return (
@@ -291,7 +291,7 @@ const ChaikinCurve = ({ svgRef, svgDimensions, controlPoints, onChange, selected
                 position={new Point(bbox.center.x, bbox.top)}
                 anchorX={'center'}
                 anchorY={'bottom'}
-                style={{ width: 'max-content', color: 'var(--black)' }}
+                style={{ width: 'max-content', color: 'var(--black)', pointerEvents: 'none' }}
             >
                 <Controls options={options} onChange={_setOptions} />
             </HtmlForeignObject>

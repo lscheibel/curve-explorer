@@ -33,11 +33,12 @@ const HtmlForeignObject = ({
             : position.y;
 
     return (
-        <foreignObject x={posX} y={posY} {...dimensions}>
+        <foreignObject x={posX} y={posY} {...dimensions} style={{ pointerEvents: 'none' }}>
             <div
                 ref={ref}
                 {...props}
                 style={{
+                    pointerEvents: 'auto',
                     overflow: 'hidden', // Allows children to define a margin and overflow will be hidden anyway.
                     ...props.style,
                 }}

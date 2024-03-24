@@ -7,6 +7,7 @@
   color: rgba(0, 0, 0, 0.87);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
   margin: 16px 16px 24px;
+  pointer-events: auto;
 }
 
 .controlGroup {
@@ -35,6 +36,7 @@
 }
 
 .numberControls {
+  display: flex;
   background: var(--white);
   border-radius: 2px;
   font-weight: 700;
@@ -57,8 +59,8 @@
   display: inline-block;
   background: var(--blue);
   border-radius: 2px;
+  overflow: hidden;
   color: var(--white);
-  padding: 0 4px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -66,7 +68,10 @@
   -moz-appearance:textfield;
   -webkit-appearance: none;
   appearance: none;
+  padding: 0 4px;
+  margin: 0;
   width: 2.5rem;
+  height: calc(100% + 0.25px);
   text-align: center;
 
   &::-webkit-outer-spin-button,
@@ -75,8 +80,6 @@
   }
 
   border: none;
-  padding: 0 4px;
-  margin: 0;
   background: transparent;
   background: var(--blue);
   border-radius: 2px;
